@@ -1,0 +1,19 @@
+# Executables
+BinaryClassifier
+*.exe
+*.out
+*.app
+a.out
+
+# IDEs
+.vs/
+.project
+.directory
+.settings
+.cproject
+
+#temporary
+.vscode
+
+#lab files
+Lab_3.c
