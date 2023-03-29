@@ -15,7 +15,6 @@ int main(void){
     ADCSRA |= (1<<ADEN) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);     //enable ADC then set prescaler to 128
 
     //pin setup
-    DDRC &= ~(1<<PIN0);     //set pin A0 to read
     DDRB |= (1<<PIN5);      //Set Port B pin 5 to output
 
     //superloop
