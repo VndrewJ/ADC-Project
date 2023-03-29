@@ -3,38 +3,39 @@
 #include <inttypes.h>
 #include <util/delay.h>
 
-void main(){
+int main(void){
     //ADC Setup
-    ADCRSA |= (1<<ADEN) | (1<<ADSP2) | (1<<ADSP1) | (1<<ADSP0);     //enable ADC then set prescaler to 128
+    ADCSRA |= (1<<ADEN) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);     //enable ADC then set prescaler to 128
 
     //pin setup
     DDRC &= ~(1<<PIN0);     //set pin A0 to read
-    DDRB |= (1<<PIN1);      //Set Port B pin 1 to output
+    DDRB |= (1<<PIN5);      //Set Port B pin 1 to output
 
     //superloop
     while(1){
         //start conversion
-        ADCRSA |= (1<<ADSC);
-        while(ADCRSA & (1<<ADSC)){      //while converting, do nothing
+        ADCSRA |= (1<<ADSC);
+        while(ADCSRA & (1<<ADSC)){      //while converting, do nothing
             asm("nop");
         }
-        uint16_t voltage;               //initialise voltage
-        voltage = ADC;                  //get values
+        uint16_t voltage = ADC;               //initialise voltage and get values
 
-        if(voltage >= 2){               //if voltage is above 2V turn on and off a couple times
-            PORTB |= (1<<PIN0);       
-            _delay_ms(50);
-            PORTB &= ~(1<<PIN0);
-            _delay_ms(50);  
-            PORTB |= (1<<PIN0);       
-            _delay_ms(50);
-            PORTB &= ~(1<<PIN0);
-            _delay_ms(50);  
+        if(voltage >= 409){               //if voltage is above 2V turn on and off 2 times
+             pulse_n(4, 250);
         }else{                          //else just do it once
-            PORTB |= (1<<PIN0);       
-            _delay_ms(50);
-            PORTB &= ~(1<<PIN0);
-            _delay_ms(50);  
+             pulse_n(2, 500); 
         }
+        //No delay here, 1 second delay taken care of by flashes
     }
+}
+
+void pulse_n(uint8_t n, uint8_t period){ 
+    //Onboard LED Flashing function, toggles LED state N times
+    
+    if(n > 0){
+        PORTB ^= (1<<PIN5);       
+        _delay_ms(period); 
+        pulse_n(n-1);
+    }
+
 }
