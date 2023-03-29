@@ -9,7 +9,7 @@ int main(void){
 
     //pin setup
     DDRC &= ~(1<<PIN0);     //set pin A0 to read
-    DDRB |= (1<<PIN5);      //Set Port B pin 1 to output
+    DDRB |= (1<<PIN5);      //Set Port B pin 5 to output
 
     //superloop
     while(1){
@@ -29,13 +29,12 @@ int main(void){
     }
 }
 
-void pulse_n(uint8_t n, uint8_t period){ 
-    //Onboard LED Flashing function, toggles LED state N times
+void pulse_n(uint8_t n, uint16_t period){ 
+    //Recursive function for flashing onboard LED, toggles state N times
     
     if(n > 0){
         PORTB ^= (1<<PIN5);       
         _delay_ms(period); 
-        pulse_n(n-1);
+        pulse_n((n-1), period);
     }
-
 }
