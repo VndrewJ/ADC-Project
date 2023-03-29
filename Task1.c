@@ -3,6 +3,13 @@
 #include <inttypes.h>
 #include <util/delay.h>
 
+//Macros for robustness
+#define VREF 2
+#define VOLTAGE 5
+#define NBITS 10
+#define THRESHOLD (VREF/VOLTAGE)/(2^NBITS)
+#define PULSE_TH 4
+
 int main(void){
     //ADC Setup
     ADCSRA |= (1<<ADEN) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);     //enable ADC then set prescaler to 128
@@ -20,7 +27,7 @@ int main(void){
         }
         uint16_t voltage = ADC;               //initialise voltage and get values
 
-        condition (voltage >= 409) pulse_n(4, 250) : pulse_n(2, 500);
+        condition (voltage >= THRESHOLD) pulse_n(PULSE_TH, 1000/PULSE_TH) : pulse_n(PULSE_TH/2, 1000/(PULSE_TH/2));
         //No delay here, 1 second delay taken care of by flashes
     }
 }
