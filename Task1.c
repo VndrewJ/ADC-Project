@@ -16,15 +16,11 @@ int main(void){
         //start conversion
         ADCSRA |= (1<<ADSC);
         while(ADCSRA & (1<<ADSC)){      //while converting, do nothing
-            asm("nop");
+
         }
         uint16_t voltage = ADC;               //initialise voltage and get values
 
-        if(voltage >= 409){               //if voltage is above 2V turn on and off 2 times
-             pulse_n(4, 250);
-        }else{                          //else just do it once
-             pulse_n(2, 500); 
-        }
+        condition (voltage >= 409) pulse_n(4, 250) : pulse_n(2, 500);
         //No delay here, 1 second delay taken care of by flashes
     }
 }
