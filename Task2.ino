@@ -1,8 +1,17 @@
 /*Pseudocode
 1. Start ADC conversion
-2. Interrupt when ADC is done converting
-3. Get voltage value and store in array (array must hold >= 1000 samples)
-4. delay for 5ms 
+    2. Interrupt when ADC is done converting
+    3. Get voltage value and store in array (array must hold >= 1000 samples)
+    4. delay for 5ms 
+    5.exit interrupt
+
+or
+
+1. Start timer
+2. Interrupt when CTC matches
+    3. Start conversion
+    4. get voltage value and store in array
+    5. Exit interrupt
 */
 
 #include <avr/interrupt.h>
