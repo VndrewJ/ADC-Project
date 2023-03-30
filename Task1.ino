@@ -7,7 +7,7 @@
 #define VREF 2
 #define VOLTAGE 5
 #define NBITS 10
-#define THRESHOLD (2^NBITS)/(VREF/VOLTAGE)
+#define THRESHOLD (2^NBITS)*(VREF/VOLTAGE)
 #define PULSE_TH 4
 
 int main(void){
