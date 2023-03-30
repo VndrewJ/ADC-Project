@@ -7,9 +7,9 @@
       "request": "launch",
       "args": [],
       "stopAtEntry": false,
-      "externalConsole": false,
-      "cwd": "/mnt/c/Users/Andrew/OneDrive - The University of Auckland/Desktop/Uni Coursebooks/Year 3/313/Assignment1/ADC-Project",
-      "program": "/mnt/c/Users/Andrew/OneDrive - The University of Auckland/Desktop/Uni Coursebooks/Year 3/313/Assignment1/ADC-Project/build/Debug/outDebug",
+      "externalConsole": true,
+      "cwd": "c:/Users/Andrew/OneDrive - The University of Auckland/Desktop/Uni Coursebooks/Year 3/313/Assignment1/ADC-Project",
+      "program": "c:/Users/Andrew/OneDrive - The University of Auckland/Desktop/Uni Coursebooks/Year 3/313/Assignment1/ADC-Project/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

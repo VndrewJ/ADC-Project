@@ -7,7 +7,7 @@
 #define VREF 2
 #define VOLTAGE 5
 #define NBITS 10
-#define THRESHOLD (VREF/VOLTAGE)/(2^NBITS)
+#define THRESHOLD (2^NBITS)/(VREF/VOLTAGE)
 #define PULSE_TH 4
 
 int main(void){
@@ -26,13 +26,14 @@ int main(void){
         }
         uint16_t voltage = ADC;               //initialise voltage and get values
 
-        condition (voltage >= THRESHOLD) pulse_n(PULSE_TH, 1000/PULSE_TH) : pulse_n(PULSE_TH/2, 1000/(PULSE_TH/2));
+        //check if voltage read is > 2V
+        voltage >= THRESHOLD ? pulse_n(PULSE_TH, 1000/PULSE_TH) : pulse_n(PULSE_TH/2, 1000/(PULSE_TH/2));
         //No delay here, 1 second delay taken care of by flashes
     }
 }
 
+//Recursive function for flashing onboard LED, toggles state N times
 void pulse_n(uint8_t n, uint16_t period){ 
-    //Recursive function for flashing onboard LED, toggles state N times
     
     if(n > 0){
         PORTB ^= (1<<PIN5);       
