@@ -10,7 +10,7 @@
 16Mhz->6.25x10^-5ms
 using 1024 prescaler -> 0.064ms ->78.125 ticks
 using 256 prescaler -> 0.016ms -> 312.5 ticks
-using 64 prescaler -> 4x10^-3ms -> 1250 ticks
+using 64 prescaler -> 4x10^-3ms -> 1250 ticks (most ideal)
 
 */
 
