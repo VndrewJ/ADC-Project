@@ -24,7 +24,7 @@ int main(void){
         while(ADCSRA & (1<<ADSC)){      //while converting, do nothing
 
         }
-        uint16_t voltage = ADC;               //initialise voltage and get values
+        uint16_t voltage = (ADC*5)/1024;               //initialise voltage and get values
 
         //check if voltage read is > 2V
         voltage >= THRESHOLD ? pulse_n(PULSE_TH, 1000/PULSE_TH) : pulse_n(PULSE_TH/2, 1000/(PULSE_TH/2));
