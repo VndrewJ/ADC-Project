@@ -21,6 +21,9 @@ using 64 prescaler -> 4x10^-3ms -> 1250 ticks (most ideal)
 
 //Macros for robustness (add later)
 
+int ringBuffer[1000];
+int i=0;
+
 //timer interrupt
 ISR(TIMER1_COMPA_vect){
     ADCSRA |= (1<<ADSC);                                            //start conversion
@@ -29,7 +32,8 @@ ISR(TIMER1_COMPA_vect){
 //ADC completion interrupt
 ISR(ADC_vect){
     uint16_t volatile voltage = ADC;
-    //other stuff to make some array
+    ringBuffer[i%1000] = (ADC*5)/1024;
+    i++;
 }
 
 int main(void){
