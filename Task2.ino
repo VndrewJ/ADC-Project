@@ -1,13 +1,3 @@
-/*Pseudocode
-
-5ms OCR1A calcualtions
-16Mhz->6.25x10^-5ms
-using 1024 prescaler -> 0.064ms ->78.125 ticks
-using 256 prescaler -> 0.016ms -> 312.5 ticks
-using 64 prescaler -> 4x10^-3ms -> 1250 ticks (most ideal)
-
-*/
-
 //james and vlad have 11 semicolons, shorten if possible
 
 #include <avr/interrupt.h>
@@ -15,9 +5,10 @@ using 64 prescaler -> 4x10^-3ms -> 1250 ticks (most ideal)
 #include <inttypes.h>
 #include <util/delay.h>
 
-//Macros for robustness (add later)
+//Macros for robustness
+#define RINGBUFFER_SIZE 1000
 
-volatile uint8_t ringBuffer[1000];
+volatile uint8_t ringBuffer[RINGBUFFER_SIZE];
 int i=0;
 
 //timer interrupt
@@ -27,8 +18,8 @@ ISR(TIMER1_COMPA_vect){
 
 //ADC completion interrupt
 ISR(ADC_vect){
-    ringBuffer[i%1000] = ADCH;          //add into ring buffer
-  	Serial.println((String)"At index " +i%1000+ " the voltage is " +ringBuffer[i%1000]);    //print value at i in ring buffer
+    ringBuffer[i%RINGBUFFER_SIZE] = ADCH;          //add into ring buffer
+  	Serial.println((String)"At index " +i%RINGBUFFER_SIZE+ " the voltage is " +ringBuffer[i%RINGBUFFER_SIZE]);    //print value at i in ring buffer
     i++;
 }
 
@@ -38,7 +29,6 @@ int main(void){
 
     //ADC setup                                                       
     ADMUX |= (1<<ADLAR) | (1<<REFS0);                               //left shift for 8 bit results and turned on reference voltage of 5V
-    DDRB |= (1<<PIN5);                                              //Set Port B pin 5 to output
 
     //enable ADC and interrupts, then set prescaler to 128
     ADCSRA |= (1<<ADEN) | (1<<ADIE) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);  
