@@ -24,6 +24,7 @@ switch case in interrupt?
 #define PRESCALER 
 #define RING_BUFFER_SIZE 1000
 
+//
 bool state=0;
 
 //ring buffer variables
@@ -37,7 +38,7 @@ int light_counter=0;
 ISR(INT0_vect){
     state = !state;                                                     //toggle state
     i=0;                                                                //reset index
-    for(int j = 0; j<RING_BUFFER_SIZE; j++){                    //reset ring buffer
+    for(int j = 0; j<RING_BUFFER_SIZE; j++){                            //reset ring buffer
         ringBuffer[i] = 0;
     }
 }
@@ -62,8 +63,8 @@ ISR(TIMER1_COMPA_vect){
             if(light_counter >= 50){                                   //same check but for 500ms
                 PORTB ^= (1<<PIN5);
                 light_counter = 0;
-                break;
             }
+            break;
     }
 }
 
