@@ -1,35 +1,18 @@
-/*
-Task 3 pseudocode
-
-2 timers
-    1 timer for blinking
-    1 timer for sampling
-
-Switch case for blinking + sampling
-
-or
-
-switch case in interrupt?
-
-*/
-
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <inttypes.h>
 #include <util/delay.h>
 
 //Macros for robustness (add later)
-#define CLOCK_FREQ 16*10^3
-#define DEFAULT_STATE_MS 1000
-#define PRESCALER 
 #define RING_BUFFER_SIZE 1000
 
-//
+//state variable
 bool state=0;
 
 //ring buffer variables
 volatile uint8_t ringBuffer[RING_BUFFER_SIZE];
 int i=0;
+int lastIndex = 0;
 
 //light variables
 int light_counter=0;
@@ -37,7 +20,8 @@ int light_counter=0;
 //button interrupt
 ISR(INT0_vect){
     state = !state;                                                     //toggle state
-    i=0;                                                                //reset index
+    lastIndex = i;                                                     
+    ADCSRA ^= (1<<ADIE);                                                //toggle adc interrupt
     for(int j = 0; j<RING_BUFFER_SIZE; j++){                            //reset ring buffer
         ringBuffer[i] = 0;
     }
@@ -45,33 +29,20 @@ ISR(INT0_vect){
 
 //ADC Timer interrupt
 ISR(TIMER1_COMPA_vect){
-    light_counter++;
-
-    //finite state switch
-    switch(state){
-        case 0:
-
-            //Light cycles every 1000ms, ADC toggles every 5ms, light needs to occur before ADC start
-            if(light_counter >= 100){
-                PORTB ^= (1<<PIN5);                                         //toggle pin5 light
-                light_counter = 0;                                          //reset light counter
-            }
-            ADCSRA |= (1<<ADSC);                                        //start conversion
-            break;
-
-        case 1:
-            if(light_counter >= 50){                                   //same check but for 500ms
-                PORTB ^= (1<<PIN5);
-                light_counter = 0;
-            }
-            break;
+    light_counter++;                                
+    
+    //flash light at 1hz in state 1, at 2hz in state 2
+    if(light_counter % (100/((int)state+1)) == 0){
+        PORTB ^= (1<<PIN5);
+        light_counter = 0;                                  //reset light counter
     }
+
+    ADCSRA |= (1<<ADSC);
 }
 
 //ADC completion interrupt
 ISR(ADC_vect){
-    ringBuffer[i%RING_BUFFER_SIZE] = ADCH;          //add into ring buffer
-  	Serial.println((String)"At index " +i%RING_BUFFER_SIZE+ " the voltage is " +ringBuffer[i%RING_BUFFER_SIZE]);    //print value at i in ring buffer
+    ringBuffer[i%RING_BUFFER_SIZE] = ADCH;                  //add into ring buffer
     i++;
 }
 
@@ -101,6 +72,25 @@ int main(void){
 
     //superloop
     while(1){
-      asm("nop");
+      switch(state){
+        case 0:                             //does nothing in state 1, interrupts take care of everything
+          Serial.println(i);
+          break;
+
+        case 1:
+
+            if(i>=1000){                    //checks if ring buffer is full
+                i=1000;
+            }
+            //print the ring buffer till wherever it stopped reading at i
+            for(int j = 0; j < i; j++){
+                Serial.println((String)"The voltage at " +j+ " is " + ringBuffer[j]);
+            }
+            i = 0;                              //reset index
+            while(state == 1){                  //finish printing and do nothing until the button is pressed again
+              Serial.println("capped");              
+                asm("nop");
+            }
+        }
     }
 }
