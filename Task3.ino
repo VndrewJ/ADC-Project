@@ -11,7 +11,7 @@ bool state=0;
 
 //ring buffer variables
 volatile uint8_t ringBuffer[RING_BUFFER_SIZE];
-int i=0;
+volatile int i=0;
 int index = 0;
 
 //light variables
@@ -52,7 +52,7 @@ int main(void){
     DDRB |= (1<<PIN5);                                              //Set Port B pin 5 to output
 
     //enable ADC and interrupts, then set prescaler to 128
-    ADCSRA |= (1<<ADEN) | (1<<ADIE) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);  
+    ADCSRA |= (1<<ADEN) | (1<<ADIE) | (1<<ADPS0);  
 
     //ADC timer setup
     TCCR1B |= (1<<WGM12) | (1<<CS11) | (1<<CS10);                   //enable CTC mode and set prescaler to 64
