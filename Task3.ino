@@ -12,15 +12,13 @@ bool state=0;
 //ring buffer variables
 volatile uint8_t ringBuffer[RING_BUFFER_SIZE];
 int i=0;
-int lastIndex = 0;
 
 //light variables
-int light_counter=0;
+uint32_t light_counter=0;
 
 //button interrupt
 ISR(INT0_vect){
-    state = !state;                                                     //toggle state
-    lastIndex = i;                                                     
+    state = !state;                                                     //toggle state                                                   
     ADCSRA ^= (1<<ADIE);                                                //toggle adc interrupt
     for(int j = 0; j<RING_BUFFER_SIZE; j++){                            //reset ring buffer
         ringBuffer[i] = 0;
