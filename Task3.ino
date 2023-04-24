@@ -11,7 +11,7 @@ bool state=0;
 
 //ring buffer variables
 volatile uint8_t ringBuffer[RING_BUFFER_SIZE];
-int i=0;
+uint64_t i=0;
 
 //light variables
 uint32_t light_counter=0;
@@ -72,7 +72,7 @@ int main(void){
     while(1){
       switch(state){
         case 0:                             //does nothing in state 1, interrupts take care of everything
-          Serial.println(i);
+          //Serial.println(i);
           break;
 
         case 1:
@@ -86,7 +86,7 @@ int main(void){
             }
             i = 0;                              //reset index
             while(state == 1){                  //finish printing and do nothing until the button is pressed again
-              Serial.println("capped");              
+              //Serial.println("capped");              
                 asm("nop");
             }
         }
