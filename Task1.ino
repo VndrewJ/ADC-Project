@@ -12,6 +12,7 @@
 
 int main(void){
     //ADC Setup
+    ADMUX |= (1<<REFS0);                                            //turn on ref voltage
     ADCSRA |= (1<<ADEN) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);     //enable ADC then set prescaler to 128
 
     //pin setup
