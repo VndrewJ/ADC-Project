@@ -83,6 +83,9 @@ int main(void){
             }
             //print the ring buffer till wherever it stopped reading at i
             for(int j = 0; j < index; j++){
+                if(state == 0){
+                    break;
+                }
                 Serial.println((String)"The voltage at " +j+ " is " + ringBuffer[j]);
             }
             i = 0;                              //reset index
