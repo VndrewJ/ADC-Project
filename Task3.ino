@@ -11,7 +11,8 @@ bool state=0;
 
 //ring buffer variables
 volatile uint8_t ringBuffer[RING_BUFFER_SIZE];
-uint64_t i=0;
+int i=0;
+int index = 0;
 
 //light variables
 uint32_t light_counter=0;
@@ -19,10 +20,8 @@ uint32_t light_counter=0;
 //button interrupt
 ISR(INT0_vect){
     state = !state;                                                     //toggle state                                                   
-    ADCSRA ^= (1<<ADIE);                                                //toggle adc interrupt
-    for(int j = 0; j<RING_BUFFER_SIZE; j++){                            //reset ring buffer
-        ringBuffer[i] = 0;
-    }
+    ADCSRA ^= (1<<ADIE);                                                //toggle adc interrupt                           
+    ringBuffer[RING_BUFFER_SIZE] = {0};                                 //reset ring buffer
 }
 
 //ADC Timer interrupt
@@ -72,22 +71,24 @@ int main(void){
     while(1){
       switch(state){
         case 0:                             //does nothing in state 1, interrupts take care of everything
-          //Serial.println(i);
+          asm("nop");
           break;
 
         case 1:
 
             if(i>=1000){                    //checks if ring buffer is full
-                i=1000;
+                index=1000;
+            } else {
+                index = i;
             }
             //print the ring buffer till wherever it stopped reading at i
-            for(int j = 0; j < i; j++){
+            for(int j = 0; j < index; j++){
                 Serial.println((String)"The voltage at " +j+ " is " + ringBuffer[j]);
             }
             i = 0;                              //reset index
             while(state == 1){                  //finish printing and do nothing until the button is pressed again
               //Serial.println("capped");              
-                asm("nop");
+              asm("nop");
             }
         }
     }
