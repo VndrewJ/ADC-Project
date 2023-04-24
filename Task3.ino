@@ -4,7 +4,7 @@
 #include <util/delay.h>
 
 //Macros for robustness (add later)
-#define RING_BUFFER_SIZE 1000
+#define RING_BUFFER_SIZE 1500
 
 //state variable
 bool state=0;
@@ -76,8 +76,8 @@ int main(void){
 
         case 1:
 
-            if(i>=1000){                    //checks if ring buffer is full
-                index=1000;
+            if(i>=RING_BUFFER_SIZE){                    //checks if ring buffer is full
+                index=RING_BUFFER_SIZE;
             } else {
                 index = i;
             }
