@@ -3,7 +3,7 @@
 #include <inttypes.h>
 #include <util/delay.h>
 
-//Macros for robustness (add later)
+//Macros for robustness
 #define RING_BUFFER_SIZE 1500
 
 //state variable
@@ -56,7 +56,7 @@ int main(void){
 
     //ADC timer setup
     TCCR1B |= (1<<WGM12) | (1<<CS11) | (1<<CS10);                   //enable CTC mode and set prescaler to 64
-    OCR1A = 1250;                                                   //set compare value to 5ms
+    OCR1A = 1247;                                                   //set compare value to 5ms
     TIMSK1 |= (1 << OCIE1A);                                        // Enable CTC interrupt for OCR1A compare match
 
     //light and button setup
@@ -81,6 +81,7 @@ int main(void){
             } else {
                 index = i;
             }
+            
             //print the ring buffer till wherever it stopped reading at i
             for(int j = 0; j < index; j++){
                 if(state == 0){

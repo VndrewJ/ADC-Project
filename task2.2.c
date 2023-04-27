@@ -1,5 +1,3 @@
-//james and vlad have 11 semicolons, shorten if possible
-
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <inttypes.h>
@@ -35,7 +33,7 @@ int main(void){
 
     //timer setup
     TCCR1B |= (1<<WGM12) | (1<<CS11) | (1<<CS10);                   //enable CTC mode and set prescaler to 64
-    OCR1A = 1250;                                                   //set compare value to 5ms
+    OCR1A = 1247;                                                   //set compare value to 5ms
     TIMSK1 |= (1 << OCIE1A);                                        // Enable CTC interrupt for OCR1A compare match
 
     sei();

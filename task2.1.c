@@ -25,9 +25,8 @@ int main(void){
             asm("nop");
         }
      	
-        //check if voltage read is > 2V
+        //check if voltage read is > 2V and delay 
         ADC >= THRESHOLD ? pulse_n(PULSE_TH, 1000/PULSE_TH) : pulse_n(PULSE_TH/2, 1000/(PULSE_TH/2));
-        //No delay here, 1 second delay taken care of by flashes
     }
 }
 
